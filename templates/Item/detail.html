@@ -1,0 +1,71 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+{item.name}
+{% endblock %}
+
+
+{% block content %}
+<div class=" grid grid-cols-5 gap-6">
+    <div class="col-span-3">
+        <img src="{{item.image.url}}" class="rounded-xl">
+    </div>
+    <div class="col-span-2 p-6 bg-gray-100 rounded-xl">
+        <h1 class="mb-6 text-3xl">{{item.name}}</h1>
+        <p class="text-gray-500"><strong>Price:</strong>{{item.price}}</p>
+        <p class="text-gray-500"><strong>Seller:</strong>{{item.created_by}}</p>
+
+        {% if item.description %} 
+            <p class="text-gray-700">
+                <strong class="text-gray-500">Description:</strong><br>
+                {{item.description}} 
+                
+            </p>
+        {% endif %} 
+
+        <br>
+        <br>
+
+        {% if request.user == item.created_by  %}
+            <a href="{% url 'Item:delete' item.id %}" class="inline-blockmt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Delete </a>
+            <a href="{% url 'Item:edit' item.id %}" class="inline-blockmt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Edit </a>
+        {% else %}
+            <a href="#" class="inline-blockmt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Contact Seller </a>
+            <form action="{% url 'cart' %}" method="POST" class="btn-block" id="{{item.id}}">
+                {% csrf_token %}                         
+                
+                <a href="{% url 'cart' %}">
+                    <input hidden type="text" name="item" value="{{item.id}}">
+                    <input type="submit" class="inline-blockmt-12 mx-15 my-15  px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700"  value="Add to Cart"> 
+                </a>
+                
+            </form>
+        {% endif %}
+
+    
+    </div>
+    
+    <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+        <h2 class="mb-12 text-2xl text-center">Related Items</h2>
+        
+        
+       <div class="grid grid-cols-3 gap-3">
+            {% for item in related_Items %}
+                <div>
+                    <a href="{% url 'Item:detail' item.id %}">
+                        <div>
+                            <img src="{{ item.image.url}}" class="rounded-t-xl">
+
+                        </div>
+                        <div class="p-6 bg-white rounded-b-xl">
+                            <h2 class="text-2xl">{{item.name}}</h2>
+                            <p class="text-gray-500">Price:{{item.price}}</p>
+
+                        </div>
+
+                    </a>
+                </div>
+            {% endfor %}
+        </div> 
+</div>
+{% endblock %}
