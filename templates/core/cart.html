@@ -1,0 +1,190 @@
+{% extends 'core/base.html' %}
+{% load cart %}
+{% load custom_filter %}
+{% block content %}
+
+
+
+Cart 
+  
+
+<div class="container">
+    <div class="border rounded p-4 m-4">
+        <table class="table table-light table">
+            <thead class="table-light">
+        
+                <tr>
+                    <th scope="col">S NO</th>
+                    <th scope="col">Item </th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total</th>
+                    
+        
+                   
+                </tr>
+            </thead>
+
+            {% if not user.is_authenticated %}
+
+                
+                <tr> <h2 class="" >Please Login to View your Cart details  </h2></tr>
+
+            {% else %}
+        
+            {% for item in items %}
+        
+        
+                <tr>
+                    <td>{{forloop.counter1}}</td>
+                    <td><img style="height:80px" class="rounded-circle" src="{{ item.image.url }}" alt="not loading "></td>
+                    <td> {{item.name}}</td>
+                    <td> {{item.price|currency }}</td>
+                    <td> {{item|quantity_in_cart:request.session.cart}}</td>
+                    <td> {{item|price_total:request.session.cart | currency }}</td>
+                    <td>
+                        <div class="row no-gutters">
+                            <form  action="{% url 'cart' %}" id="{{item.id}}" method="post">
+                                {% csrf_token %}
+                                <input hidden type="number" name="remove"  value="{{item.id}}">
+                                <input type="submit" value=" - " class=" col-2 btn btn-block btn-secondary">
+                            </form>
+                            <div class="text-center col">{{item|quantity_in_cart:request.session.cart}} in cart</div>
+                            <form action="{% url 'cart'  %}"  method="post">
+                                {% csrf_token %}
+                                <input hidden type="text" name="item" value="{{item.id}}">
+                                <input type="submit" value=" + " class=" col-2 btn btn-block btn-secondary">
+
+                            </form>
+                        </div>
+                    </td>
+                    
+                   
+                </tr>
+        
+                
+        
+            {% endfor %}
+            
+
+
+            <tfoot>
+                {% if request.session.cart %}
+                <tr>
+                    <th colspan="4">Total</th>
+                    <th>{{items|cart_total_price:request.session.cart}}</th>
+    
+    
+                </tr>
+                {% else %}
+                <tr>
+                    <h2 class="" >No Items in Cart please checkout products <a href="{% url 'index' %}"> here </a>  </h2>
+
+
+                </tr>
+                
+                {% endif %}
+            </tfoot>
+            {% endif %}
+        
+        </table> 
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+        {% if user.is_authenticated %}
+        
+        <div class="m-3 p-3">
+            <a href="#" data-toggle="modal" data-target="#exampleModal" class="btn btn-outline-info border rounded col-lg-13 float-right">Check Out</a>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Check out form </h5>
+                    <hr>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="m-2 p-3">
+                        <form action="{% url 'dashboard:CheckOut' %}" method="POST">
+                            {% csrf_token %}
+
+                            <div class="form-group">
+                                <label for="Fname"></label>
+                                <input type="text" name="Fname" id="" class="form-control" placeholder="first name" aria-describedby="helpId">
+                            </div>
+                            <div class="form-group">
+                                <label for="Lname"></label>
+                                <input type="text" name="Lname" id="" class="form-control" placeholder="last name" aria-describedby="helpId">
+                            </div>
+                            <div class="form-group">
+                                <label for="Phone"></label>
+                                <input type="text" name="Phone" id="" class="form-control" placeholder="Phone" aria-describedby="helpId">
+                            </div>
+                            <div class="form-group">
+                                <label for="Address"></label>
+                                <input type="text" name="Address" id="" class="form-control" placeholder="Address" aria-describedby="helpId">
+                            </div>
+                            <div class="form-group">
+                                <label for="City"></label>
+                                <input type="text" name="City" id="" class="form-control" placeholder="City" aria-describedby="helpId">
+                            </div>
+                            <div class="form-group">
+                                <label for="State"></label>
+                                <input type="text" name="State" id="" class="form-control" placeholder="State" aria-describedby="helpId">
+                            </div>
+                            <div class="form-group">
+                                <label for="Pincode"></label>
+                                <input type="text" name="Pincode" id="" class="form-control" placeholder="Pincode" aria-describedby="helpId">
+                            </div>
+                            
+
+                            <button type="submit" class="float-right btn bgn-outline-info col=lg-6">submit</button>
+                            <button type="button" class="btn btn-primary payWithRazorpay w-100 mt-2">Pay with Razorpay </button>
+                            
+                            <!-- <a href="{% url 'dashboard:myOrders' %}">
+                                <button type="button" class="float-right btn bgn-outline-info col=lg-6">Orders</button>
+                            </a> -->
+                              
+                            
+
+                            <!-- <a href=""></a> -->
+                        </form>
+                        
+                    </div>
+                ...
+                </div>
+                
+            
+        </div>
+        {% endif %}
+        {% if messages %}
+        
+        <div class="alert alert-success {{ message.tags }} mx-3 mb-0" role="alert">
+            <h4 class="alert-heading">{{messages}}</h4>
+            <p class="mx-0 mb=0 my=0 py=0"></p>
+
+        </div>
+        
+        {% endif %}
+        <!-- Button trigger modal -->
+
+    </div>
+            
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="static/check.js"></script>
+{% endblock scripts  %}
+
+
+
+

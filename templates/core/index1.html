@@ -1,0 +1,70 @@
+{% extends 'core/base.html' %}
+{% load cart %}
+
+{% block title %}
+    HomePage 
+{% endblock %}
+
+{% block content %}
+    <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+        <h2 class="mb-12 text-2xl text-center">{{ title }}</h2>
+        
+        <!-- Grid for items -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for item in items %}
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg">
+                    <a href="{% url 'Item:detail' item.id %}">
+                        <div class="mx-auto" style="width: 18rem;">
+                            <img src="{{ item.image.url }}" class="rounded-t-xl card-img-top" alt="{{ item.name }}">
+                        </div>
+                        <div class="mx-6 bg-white p-4">
+                            <h2 class="text-2xl">{{ item.name }}</h2>
+                            <p class="text-gray-500">Price: {{ item.price }}</p>
+                        </div>
+                    </a>
+                    <div class="card-footer p-0 no-gutters">
+                        {% if item|is_in_cart:request.session.cart %}
+                            <div class="row no-gutters">
+                                <form action="/#{{ item.id }}" class="col-2" id="{{ item.id }}" method="post">
+                                    {% csrf_token %}
+                                    <input hidden type="number" name="remove" value="{{ item.id }}">
+                                    <input type="submit" value=" - " class="col-2 btn btn-block btn-secondary">
+                                </form>
+                                <div class="text-center col">{{ item|quantity_in_cart:request.session.cart }} in cart</div>
+                                <form action="/#{{ item.id }}" class="col-2" id="{{ item.id }}" method="post">
+                                    {% csrf_token %}
+                                    <input hidden type="text" name="item" value="{{ item.id }}">
+                                    <input type="submit" value=" + " class="col-2 btn btn-block btn-secondary">
+                                </form>
+                            </div>
+                        {% else %}   
+                            <form action="/#{{ item.id }}" method="POST" class="btn-block" id="{{ item.id }}">
+                                {% csrf_token %}                         
+                                <input hidden type="text" name="item" value="{{ item.id }}">
+                                <input type="submit" class="float-right btn btn-light border btn-sm form-control" value="Add to Cart"> 
+                            </form>
+                        {% endif %}                       
+                    </div>
+                </div>
+            {% endfor %}
+        </div> 
+    </div>
+
+    <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+        <h2 class="mb-12 text-2xl text-center">Newest Items</h2>
+        
+        <!-- Grid for categories -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for category in categories %}
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg">
+                    <a href="#">
+                        <div class="p-6 bg-white">
+                            <h2 class="text-2xl">{{ category.name }}</h2>
+                            <p class="text-gray-500">{{ category.items.count }} items</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div> 
+    </div>
+{% endblock %}
