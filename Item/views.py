@@ -3,6 +3,7 @@ from .models import Item
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from core.decorators import *
 # Create your views here.
 # 
 # 
@@ -25,7 +26,7 @@ def item(request):
 
 
     context={'items':items ,'query':query,'categories':categories,'category_id':category_id}
-    return render(request,'Item/item1.html',context)   
+    return render(request,'Item/item.html',context)   
 
 def get_items_by_ids(ids):
     return Item.objects.filter(id__in=ids)
@@ -37,7 +38,7 @@ def detail(request,pk):
     related_Items=Item.objects.filter(category=item.category,is_sold=False).exclude(pk=pk)[0:6]
     context={'item': item,'related_Items': related_Items}
 
-    return render(request,'Item/detail1.html',context)
+    return render(request,'Item/detail.html',context)
 
 
 def deleteItem(request,pk):
@@ -77,6 +78,7 @@ def edit(request,pk):
 
 
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin','Developer'])
 def newItem(request):
     form=NewItemForm()
     print("*")
@@ -97,6 +99,6 @@ def newItem(request):
 
 
     # return HttpResponse('This is Homepage')
-    return render(request,'Item/form1.html',context=context)
+    return render(request,'Item/form.html',context=context)
 
 

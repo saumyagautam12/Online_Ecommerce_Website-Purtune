@@ -8,6 +8,7 @@ from django.views import View
 from django.contrib.auth.decorators import login_required 
 from django.contrib.auth.models import User,auth
 from django.contrib.auth import authenticate, login
+from .decorators import * 
 
 
 # User=get_user_model()
@@ -127,7 +128,7 @@ class index(View):
         #     print(item.name)
         #     print(item.price)
 
-        return render(request,'core/index4.html',{'items':items,'categories':categories})
+        return render(request,'core/index.html',{'items':items,'categories':categories})
 
 # def index(request):
     
@@ -145,7 +146,7 @@ def signup(request):
             user=form.save()
             # Customer.objects.create(user=user,first_name=user.first_name,last_name=user.last_name,email=user.email,phone=user.phone,)
 
-            return redirect('index')
+            return redirect('login')
     msg=False
 
 
@@ -153,8 +154,10 @@ def signup(request):
     # return render(request)
 
     # return HttpResponse('This is Homepage')
-    return render(request,'core/signup1.html',context=context)
+    return render(request,'core/signup.html',context=context)
 
+
+@unauthenticated_user
 def login(request):
     # returnUrl=request.GET.get('return_url')
     if request.method=="POST":

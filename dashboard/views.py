@@ -10,9 +10,11 @@ from django.contrib import messages
 from core.templatetags.cart import * 
 import razorpay
 from middleware.auth import  *
+from core.decorators import * 
 
 
 @login_required
+@allowed_users(allowed_roles=['Developer'])
 def Dashboard(request):
     items=Item.objects.filter(created_by=request.user) 
 
