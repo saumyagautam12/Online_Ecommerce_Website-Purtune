@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 from django.db import models
-from django.contrib.auth.models import User
+from core.models  import CustomUser
 import datetime
 
 
@@ -11,7 +11,7 @@ from Item.models import *
 
 class Order(models.Model):
     
-    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    user=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
     fname=models.CharField(max_length=100,default='')
     lname=models.CharField(max_length=100,default='')
     phone=models.CharField(max_length=10,default='')

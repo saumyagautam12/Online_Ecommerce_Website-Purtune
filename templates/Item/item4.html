@@ -1,0 +1,240 @@
+{% extends 'core/base.html' %}
+
+{% load extras %}
+
+{% block title %}Items{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<style>
+  .main-area {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 0px;
+    background-color: #f8f9fa;
+  }
+
+  .product-cards {
+    height: 50;
+    background-color: white;
+    padding: 2px;
+  }
+
+  .btn-primary {
+    margin: 10px;
+  }
+
+
+
+  .pagination {
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .utility {
+    display: flex;
+  }
+  
+  .filter-btn, .sort-btn, .clear-btn {
+    display: block;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #38b2ac;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.2s ease-in-out;
+  }
+  .filter-btn:hover, .sort-btn:hover, .clear-btn:hover {
+    background-color: #2c7a7b;
+  }
+
+  .product-card {
+    background-color: white;
+    border-radius: 12px;
+    height:auto;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+  }
+
+ 
+  .product-card:hover {
+    transform: translateY(-10px);
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+  }
+  .pagination li {
+    margin: 0 5px;
+  }
+  .pagination a {
+   
+    padding: 8px 12px;
+    border-radius: 5px;
+    background-color: #38b2ac;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.2s ease-in-out;
+  }
+  .pagination a:hover {
+    background-color: #2c7a7b;
+  }
+  .pagination .active a {
+    background-color: #2c7a7b;
+    font-weight: bold;
+  }
+
+
+   
+      
+
+
+  
+  
+</style>
+
+
+{% endblock %}
+
+{% block js %}
+<script>
+  // Get sorting and price filters to display in dropdown
+  function get(name) {
+    if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))
+      return decodeURIComponent(name[1]);
+  }
+
+  if (get('ordering')) {
+    document.getElementById('placeholder').innerHTML = "Sort: " + document.getElementById(get('ordering')).innerHTML;
+  }
+
+  if (get('price')) {
+    document.getElementById('price-placeholder').innerHTML = "Price: " + document.getElementById('pr' + get('price')).innerHTML;
+  }
+
+  // Get URL with ordering applied
+  function finalurl() {
+    var url = new URL(window.location.href);
+    var search_params = url.searchParams;
+    search_params.set('ordering', document.getElementById("sort-list").value);
+    url.search = search_params.toString();
+    return url.toString();
+  }
+
+  // Get URL with price filtering
+  function finalurl2() {
+    var url = new URL(window.location.href);
+    var search_params = url.searchParams;
+    search_params.set('price', document.getElementById("price-list").value);
+    url.search = search_params.toString();
+    return url.toString();
+  }
+</script>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+  // Auto-suggestions for search
+  $(function () {
+    $("#query").autocomplete({
+      source: "{% url 'Item:suggestionapi' %}",
+      minLength: 2
+    });
+  });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="pb-6 grid grid-cols-4 gap-4 bg-gray-100">
+    <div class="col-span-1">
+        <form method="get" action="{% url 'Item:listItems' %}">
+            <input name="query" class="w-full py-4 px-6 border rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400" type="text" id="query" value="{{ query }}" placeholder="Search for a product...">
+            <button class="filter-btn">Search</button>
+        </form>
+
+        <!-- Price filter dropdown -->
+        <select name="price" id="price-list" onchange="location=finalurl2();" class="w-full py-2 px-4 border rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400">
+          <option value="" id="price-placeholder" disabled selected hidden>Price</option>
+          <option id="pr500" value="500">less than 500</option>
+          <option id="pr1000" value="1000">less than 1000</option>
+          <option id="pr2000" value="2000">less than 2000</option>
+          <option id="pr10000" value="10000">less than 10000</option>
+        </select>
+
+        <!-- Sort functionality -->
+        <select name="sort" id="sort-list" onchange="location=finalurl();" class="w-full py-2 px-4 border rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 mt-4">
+          <option value="" id="placeholder" disabled selected hidden>Sort</option>
+          <option id="price" value="price">Price: Low To High</option>
+          <option id="-price" value="-price">Price: High To Low</option>
+          <option id="product_name" value="name">Product Name</option>
+          <option id="-date_added" value="-created_at">What's New</option>
+        </select>
+
+        <hr class="my-6">
+        <p class="font-semibold">Categories</p>
+        <ul>
+            {% for category in categories %}
+                <li class="py-2 px-2 rounded-xl {% if category.id == category_id %} bg-gray-200 {% endif %}">
+                    <a href="{% url 'Item:listItems' %}?query={{ query }}&category={{ category.id }}">{{ category.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <hr class="my-6">
+        <p class="font-semibold">Clear Filter</p>
+        <a href="{% url 'Item:listItems' %}" class="clear-btn">Clear Filters</a>
+    </div>
+
+    <!-- Product Cards Section -->
+
+    <div class="col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 h-">
+        {% for item in items %}
+            <div class="product-card w-full h-66 ">
+                <a href="{% url 'Item:detail' item.id %}">
+                    <div class="w-full h-56 bg-gray-200 flex items-center justify-center">
+                        <img src="{{ item.image.url }}" alt="{{ item.name }}" class="max-w-full max-h-full object-contain rounded-t-xl">
+                    </div>
+                    <div class="p-4 flex flex-col">
+                        <h2 class="text-xl font-semibold mb-1">{{ item.name }}</h2>
+                        <p class="text-gray-20 ">Price: {{ item.price }}</p>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div> 
+
+    
+    <br>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <nav class="pagination">
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="/Item/item/?page={{ page_obj.previous_page_number }}&{{ request.GET.urlencode|safe|cut:'page=' }}">Previous</a>
+        </li>
+        {% endif %}
+        {% for i in paginator.page_range %}
+        {% if i == page_obj.number %}
+        <li class="page-item active">
+          <a class="page-link" href="/Item/item/?page={{ i }}&{{ request.GET.urlencode|safe|cut:'page=' }}">{{ i }}</a>
+        </li>
+        {% else %}
+        <li class="page-item">
+          <a class="page-link" href="/Item/item/?page={{ i }}&{{ request.GET.urlencode|safe|cut:'page=' }}">{{ i }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="/Item/item/?page={{ page_obj.next_page_number }}&{{ request.GET.urlencode|safe|cut:'page=' }}">Next</a>
+        </li>
+
+        {% endif %}
+    {% endif %}
+
+{% endblock %}

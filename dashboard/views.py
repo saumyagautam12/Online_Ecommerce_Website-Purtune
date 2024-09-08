@@ -14,7 +14,7 @@ from core.decorators import *
 
 
 @login_required
-@allowed_users(allowed_roles=['Developer'])
+@allowed_users(allowed_roles=['admin','Developer'])
 def Dashboard(request):
     items=Item.objects.filter(created_by=request.user) 
 

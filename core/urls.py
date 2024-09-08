@@ -13,8 +13,9 @@ urlpatterns = [
     path('',index.as_view(),name='index'),
     path('cart',cart.as_view(),name='cart'),
     path('contact/',views.contact,name='contact'),
-    path('signup/',views.signup,name='signup'),
-    path('login/',auth_views.LoginView.as_view(template_name='core/login.html',authentication_form=LoginForm),name='login'),
+    path('signup/',SignUpView.as_view(),name='signup'),
+    path('login/',Login.as_view(),name='Login'),
+    # path('login/',auth_views.LoginView.as_view(template_name='core/login.html',authentication_form=LoginForm),name='login'),
     path('Logout/',views.Logout,name='Logout'),
 
 ]
