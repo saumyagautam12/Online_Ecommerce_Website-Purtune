@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,HttpResponseRedirect
 from Item.models import Category,Item
 from Item.views import get_items_by_ids
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm,AuthenticationForm
+
 from .forms import *
 from .models import *
 from django.views import View
@@ -9,6 +9,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User,auth
 from django.contrib.auth import authenticate, login
 from .decorators import * 
+from django.contrib.auth.views import LoginView,LogoutView
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
 
 
 # User=get_user_model()
@@ -70,6 +73,7 @@ class index(View):
         item=request.POST.get('item')
         remove=request.POST.get('remove')
         cart=request.session.get('cart')
+        # print(request.user.groups.all.0.name,"Check")
         
 
         if remove:
@@ -136,62 +140,80 @@ class index(View):
 def contact(request):
     return render(request, 'core/contact.html')
 
-def signup(request):
-    form=SignupForm()
-
-    if request.method=='POST':
-
-        form=SignupForm(request.POST)
-        if form.is_valid():
-            user=form.save()
-            # Customer.objects.create(user=user,first_name=user.first_name,last_name=user.last_name,email=user.email,phone=user.phone,)
-
-            return redirect('login')
-    msg=False
 
 
-    context={'form':form,'msg':msg}
-    # return render(request)
+class SignUpView(CreateView):
+    form_class = SignUpForm
+    model = CustomUser
+    template_name='core/SignUp.html'
+    success_url = reverse_lazy('Login') 
 
-    # return HttpResponse('This is Homepage')
-    return render(request,'core/signup.html',context=context)
+
+class Login(LoginView):
+    # form_class=LoginForm 
+    # model=CustomUser 
+    template_name='core/login.html'
+    success_url=reverse_lazy('index') 
+
+# class Logout(LogoutView):
+#     success_url=reverse_lazy('index') 
+
+# def signup(request):
+#     form=SignupForm()
+
+#     if request.method=='POST':
+
+#         form=SignupForm(request.POST)
+#         if form.is_valid():
+#             user=form.save()
+#             # Customer.objects.create(user=user,first_name=user.first_name,last_name=user.last_name,email=user.email,phone=user.phone,)
+
+#             return redirect('login')
+#     msg=False
 
 
-@unauthenticated_user
-def login(request):
-    # returnUrl=request.GET.get('return_url')
-    if request.method=="POST":
-        # name=request.POST.get('name')
-        username=request.POST.get('username')
-        password=request.POST.get('password')
-        # password2=request.POST.get('password2')
+#     context={'form':form,'msg':msg}
+#     # return render(request)
 
-        user = auth.authenticate(username=username, password=password)
-        if user is not None:
-            auth.login(request, user)
-            # messages.info(request,'Welcome')
-            # if returnUrl :
-            #     return HttpResponseRedirect(returnUrl)
+#     # return HttpResponse('This is Homepage')
+#     return render(request,'core/signup.html',context=context)
+
+
+# @unauthenticated_user
+# def login(request):
+#     # returnUrl=request.GET.get('return_url')
+#     if request.method=="POST":
+#         # name=request.POST.get('name')
+#         username=request.POST.get('username')
+#         password=request.POST.get('password')
+#         # password2=request.POST.get('password2')
+
+#         user = auth.authenticate(username=username, password=password)
+#         if user is not None:
+#             auth.login(request, user)
+#             # messages.info(request,'Welcome')
+#             # if returnUrl :
+#             #     return HttpResponseRedirect(returnUrl)
                 
-            # else:
-                # returnurl=None
-            return redirect("index")
+#             # else:
+#                 # returnurl=None
+#             return redirect("index")
 
-            # Redirect to a success page.
+#             # Redirect to a success page.
         
-        else:
+#         else:
 
-            # messages.info(request,'Invalid Credentials')
-            return render(request,'core/login.html')
+#             # messages.info(request,'Invalid Credentials')
+#             return render(request,'core/login.html')
 
-    # return HttpResponse('This is about Page')
-    else:
-        # return render(request,'about.html')
-        return render(request,'core/login.html')
+#     # return HttpResponse('This is about Page')
+#     else:
+#         # return render(request,'about.html')
+#         return render(request,'core/login.html')
 
-    # return HttpResponse('This is Login page')
-    # return render(request,'index.html')
-    # return render(request,'core/login.html')
+#     # return HttpResponse('This is Login page')
+#     # return render(request,'index.html')
+#     # return render(request,'core/login.html')
 
 
 def Logout(request):
@@ -201,9 +223,9 @@ def Logout(request):
 
 
 
-    # return redirect('Home')
+    return redirect('index')
 
-    return redirect('login')
+#     return redirect('login')
 
 
 # @login_required(login_url='Login')

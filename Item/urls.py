@@ -12,5 +12,9 @@ urlpatterns = [
     path('delete/<int:pk>',views.deleteItem,name='delete'),
     path('newItem',views.newItem,name="newItem"),
     path('edit/<int:pk>',views.edit,name="edit"),
-    path('item/',views.item,name='item')
+    # path('item/',views.item,name='item'),
+    path('item/',views.listItems,name='listItems'),
+
+    path('api/listItemsapi/', views.listItemsApi, name="listItemsapi"),
+    path('api/suggestionapi/', views.suggestionApi, name="suggestionapi"),
 ]

@@ -1,6 +1,7 @@
 {% load static %}
 
 {% load cart %}
+{% load extras %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +11,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <title>{% block title %} {% endblock %}</title>
 </head>
-
 <body>
     
 
@@ -21,7 +21,7 @@
         
         
         <div class="ml-auto space-x-6">
-            <a href="{% url 'Item:item' %}" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-gray-700 ">Browse</a>
+            <a href="{% url 'Item:listItems' %}" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-gray-700 ">Browse</a>
             
             
             <a href="{% url 'cart' %}" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-gray-700">Cart
@@ -41,7 +41,7 @@
 
             {% else %}
                 <a href="{% url 'signup' %}" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Signup</a>
-                <a href="{% url 'login' %}" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-gray-700">Login</a>
+                <a href="{% url 'Login' %}" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-gray-700">Login</a>
                 
             {% endif %}
         </div>
@@ -51,11 +51,22 @@
         </div>
     </nav>
 
+    {% block css%}
+    {% endblock %}
+
+    {% block js %}
+
+    {% endblock %}
+
+
+
     <div class="px-6 py-3 ">
         {% block content %}
 
         {% endblock %}
     </div>
+
+
 
     
         

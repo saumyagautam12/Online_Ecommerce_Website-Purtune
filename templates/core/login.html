@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="flex justify-center items-center min-h-screen"> <!-- Center the form both vertically and horizontally -->
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md min-h-screen"> <!-- Adjust background, padding, and max width -->
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md "> <!-- Adjust background, padding, and max width -->
 
         <!-- <div class="form-layout"> -->
         <form method="POST" autocomplete="off">
@@ -12,7 +12,7 @@
             
             <h2 class="mb-12 text-2xl text-center">Login</h2>
             <div class="mb-3">
-                <label class="inline-block mb-2">Username</label><br>
+                <label class="inline-block mb-2">Email</label><br>
                 {{form.username}}
             </div>  
             <!-- <div class="mb-3">
@@ -20,7 +20,7 @@
                 {{form.email}}
             </div>  -->
             <div class="mb-3">
-                <label class="inline-block mb-2">Password1</label><br>
+                <label class="inline-block mb-2">Password</label><br>
                 {{form.password}}
                 <!-- {{form.password}} -->
             </div>  

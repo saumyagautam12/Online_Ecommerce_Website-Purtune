@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'core',
     'Item',
     'dashboard',
+    'multiselectfield',
 ]
 
 MIDDLEWARE = [
@@ -119,6 +120,9 @@ USE_I18N = True
 
 USE_TZ = True
 
+AUTH_USER_MODEL='core.CustomUser'
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -146,3 +150,7 @@ RAZOR_KEY_SECRET = 't3Lij4Bp2vGPCIGg6BRSShqN'
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
 # APPEND_SLASH=False
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
