@@ -5,11 +5,11 @@
 {% block content %}
 <div class="pb-6 grid grid-cols-4 gap-4 bg-gray-100">
     <div class="col-span-1">
-<<<<<<< HEAD
+
         <form method="get" action="{% url 'Item:item' %}">
-=======
+
         <form method="get" action="{% url 'Item:listItems' %}">
->>>>>>> main
+
             <input name="query" class="w-full py-4 px-6 border rounded-xl" type="text" value="{{ query }}" placeholder="Find a bike, a chair">
             <button class="mt-2 py-4 px-8 text-lg bg-teal-500 text-white rounded-xl">Search</button>
         </form>
@@ -47,10 +47,5 @@
             </div>
         {% endfor %}
     </div>
-<<<<<<< HEAD
-=======
-
-    
->>>>>>> main
 </div>
 {% endblock %}

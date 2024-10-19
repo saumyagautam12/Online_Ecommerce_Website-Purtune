@@ -1,14 +1,13 @@
 {% extends 'core/base.html' %}
-<<<<<<< HEAD
-{% block content %}
+
 
 {% load cart %}
 {% load custom_filter %}
-=======
+
 {% load cart %}
 {% load custom_filter %}
 {% block content %}
->>>>>>> main
+
 
 Order 
 
@@ -18,20 +17,13 @@ Order
             <thead class="table-light">
         
                 <tr>
-<<<<<<< HEAD
-                    <th scope="col">S NO</th>
 
-                    <th scope="col">Item </th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Total</th>
-=======
+
                     <th class="px-4 py-3 text-left text-sm font-medium text-gray-600" scope="col">S NO</th>
                     <th class="px-4 py-3 text-left text-sm font-medium text-gray-600" scope="col">Item </th>
                     <th class="px-4 py-3 text-left text-sm font-medium text-gray-600" scope="col">Price</th>
                     <th class="px-4 py-3 text-left text-sm font-medium text-gray-600" scope="col">Quantity</th>
                     <th class="px-4 py-3 text-left text-sm font-medium text-gray-600" scope="col">Status</th>
->>>>>>> main
                     
         
                    
@@ -39,20 +31,6 @@ Order
             </thead>
         
             {% for order  in orders %}
-<<<<<<< HEAD
-        
-        
-                <tr>
-                    <td>{{forloop.counter1}}</td>
-                    {% if order.item in items %}
-                        <td><img style="height:80px" class="rounded-circle" src="{{ order.item.image.url }}" alt="not loading "></td> 
-
-
-                        <td> {{order.item.name}}</td>
-                        <td> {{order.item.price|currency }}</td>
-                        <td> {{order.quantity}}</td>
-                        <td> {{order.price }}</td>
-=======
             
         
         
@@ -66,7 +44,6 @@ Order
                         <td class="px-4 py-3"> {{order.item.price|currency }}</td>
                         <td class="px-4 py-3"> {{order.quantity}}</td>
                         <!-- <td class="px-4 py-3"> {{order.price }}</td> -->
->>>>>>> main
                         {% if order.status %}
                             <td><small class="badge badge-success">Completed</small></td>
                         {% else %}

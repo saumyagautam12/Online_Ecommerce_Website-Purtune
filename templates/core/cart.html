@@ -38,11 +38,11 @@ Cart
                 <tr>
                     <td>{{forloop.counter1}}</td>
                     <td><img style="height:80px" class="rounded-circle" src="{{ item.image.url }}" alt="not loading "></td>
-<<<<<<< HEAD
+
                     <td> {{item.name}}</td>
-=======
+
                     <!-- <td> {{item.name}}</td> -->
->>>>>>> main
+
                     <td> {{item.price|currency }}</td>
                     <td> {{item|quantity_in_cart:request.session.cart}}</td>
                     <td> {{item|price_total:request.session.cart | currency }}</td>
