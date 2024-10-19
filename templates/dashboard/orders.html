@@ -1,8 +1,7 @@
 {% extends 'core/base.html' %}
-{% block content %}
-
 {% load cart %}
 {% load custom_filter %}
+{% block content %}
 
 Order 
 
@@ -12,12 +11,11 @@ Order
             <thead class="table-light">
         
                 <tr>
-                    <th scope="col">S NO</th>
-
-                    <th scope="col">Item </th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Total</th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-600" scope="col">S NO</th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-600" scope="col">Item </th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-600" scope="col">Price</th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-600" scope="col">Quantity</th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-600" scope="col">Status</th>
                     
         
                    
@@ -25,18 +23,19 @@ Order
             </thead>
         
             {% for order  in orders %}
+            
         
         
-                <tr>
-                    <td>{{forloop.counter1}}</td>
+                <tr class="hover:bg-gray-50">
+                    <td class="px-4 py-3">{{forloop.counter1}}</td>
                     {% if order.item in items %}
-                        <td><img style="height:80px" class="rounded-circle" src="{{ order.item.image.url }}" alt="not loading "></td> 
+                        <td class="px-4 py-3"><img style="height:80px" class="rounded-circle" src="{{ order.item.image.url }}" alt="not loading "></td> 
 
 
-                        <td> {{order.item.name}}</td>
-                        <td> {{order.item.price|currency }}</td>
-                        <td> {{order.quantity}}</td>
-                        <td> {{order.price }}</td>
+                        <!-- <td class="px-4 py-3"> {{order.item.name}}</td> -->
+                        <td class="px-4 py-3"> {{order.item.price|currency }}</td>
+                        <td class="px-4 py-3"> {{order.quantity}}</td>
+                        <!-- <td class="px-4 py-3"> {{order.price }}</td> -->
                         {% if order.status %}
                             <td><small class="badge badge-success">Completed</small></td>
                         {% else %}
