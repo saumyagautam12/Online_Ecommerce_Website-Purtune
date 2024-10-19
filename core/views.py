@@ -181,7 +181,11 @@ class Login(LoginView):
 
 # @unauthenticated_user
 # def login(request):
+<<<<<<< HEAD
 #     # returnUrl=request.GET.get('return_url')
+=======
+#     # returnUrl=request.GET.get('return_url')          -------- land with the same earlier url which was before after login 
+>>>>>>> main
 #     if request.method=="POST":
 #         # name=request.POST.get('name')
 #         username=request.POST.get('username')
